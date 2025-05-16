@@ -1,0 +1,45 @@
+name: Build and deploy a TaskManageSystem to Azure
+stages:
+  - stage: Build
+    displayName: Build
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: UseDotNet@2
+            inputs:
+              useglobalJson: true
+              performMultiLevelLookup: true
+          - task: DotnetCoreCLI@2
+            displayName: Restore NuGet packages
+            inputs:
+              command: 'restore'
+              feedsToUse : 'select'
+              vstsFeed: 'Task.management'
+              includeNuGetOrg: false
+              configuration: 'Release'
+          - task: DotnetCoreCLI@2
+            displayName: Build Release
+            inputs:
+              command: 'build'
+              arguments: '--no-restore --configuration Release'
+  # - stage: Deploy
+  #   displayName: Deploy
+  #   dependsOn: Build
+  #   condition: succeeded()
+  #   jobs:
+  #     - job: Deploy
+  #       displayName: Deploy to Azure Web App
+  #       pool:
+  #         vmImage: 'windows-latest'
+  #       steps:
+  #         - checkout: self
+  #         - task: AzureWebApp@1
+  #           inputs:
+  #             azureSubscription: 'your-azure-subscription'
+  #             appType: 'webApp'
+  #             appName: 'your-web-app-name'
+  #             packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+  #           displayName: 'Deploy to Azure Web App'

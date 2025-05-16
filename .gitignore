@@ -10,3 +10,7 @@
 /Web/bin/Debug/net8.0
 /Web/obj
 /.vs/ProjectEvaluation
+/Web/bin/Release/net8.0
+/Web/publish
+/Web/publish.zip
+/Domain/bin/Release/net8.0
